@@ -47,8 +47,7 @@ export class AuthService {
       where: {
         email: dto.email,
       },
-      }
-    );
+    });
 
     // if user not found throw exception error
     if (!user) {
@@ -56,17 +55,14 @@ export class AuthService {
     }
 
     // compare password
-    const pwMatches = await argon.verify(
-      user.hash,
-      dto.password,
-    );
+    const pwMatches = await argon.verify(user.hash, dto.password);
 
     if (!pwMatches) {
       throw new ForbiddenException('Credentials incorrect');
     }
 
-
-    return { message: 'user signed in' };
+    delete user.hash;
+    return user;
   }
 
   signout() {
