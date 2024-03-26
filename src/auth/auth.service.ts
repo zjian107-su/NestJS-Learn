@@ -36,10 +36,15 @@ export class AuthService {
 
       return this.signToken(user.id, user.email);
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (
+        error instanceof
+        PrismaClientKnownRequestError
+      ) {
         console.log(error.code);
         if (error.code === 'P2002') {
-          throw new ForbiddenException('email already exists');
+          throw new ForbiddenException(
+            'email already exists',
+          );
           // return { message: 'email already exists' };
         }
       }
@@ -47,24 +52,34 @@ export class AuthService {
     }
   }
 
-  async signin(dto: AuthDto): Promise<{ access_token: string }> {
+  async signin(
+    dto: AuthDto,
+  ): Promise<{ access_token: string }> {
     // find user
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: dto.email,
-      },
-    });
+    const user =
+      await this.prisma.user.findUnique({
+        where: {
+          email: dto.email,
+        },
+      });
 
     // if user not found throw exception error
     if (!user) {
-      throw new ForbiddenException('Credentials incorrect');
+      throw new ForbiddenException(
+        'Credentials incorrect',
+      );
     }
 
     // compare password
-    const pwMatches = await argon.verify(user.hash, dto.password);
+    const pwMatches = await argon.verify(
+      user.hash,
+      dto.password,
+    );
 
     if (!pwMatches) {
-      throw new ForbiddenException('Credentials incorrect');
+      throw new ForbiddenException(
+        'Credentials incorrect',
+      );
     }
 
     return this.signToken(user.id, user.email);
