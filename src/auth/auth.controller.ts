@@ -13,7 +13,7 @@ export class AuthController {
     // @Body('email') email: string,
     // @Body('password', ParseIntPipe) password: string, // pipe into number
   ) {
-    console.log({ dto });
+    // console.log({ dto });
 
     // console.log({
     //   email,

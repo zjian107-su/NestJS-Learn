@@ -27,11 +27,11 @@ export class AuthService {
           email: dto.email,
           hash,
         },
-        select: {
-          id: true,
-          email: true,
-          hash: true,
-        },
+        // select: {
+        //   id: true,
+        //   email: true,
+        //   hash: true,
+        // },
       });
 
       return this.signToken(user.id, user.email);
@@ -80,7 +80,6 @@ export class AuthService {
     };
 
     const secret = this.config.get('JWT_SECRET');
-    console.log('Daniel', secret);
 
     const token = await this.jwt.signAsync(payload, {
       expiresIn: '15m',
